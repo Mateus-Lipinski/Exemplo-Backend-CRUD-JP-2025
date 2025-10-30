@@ -8,6 +8,8 @@ mandei no terminal 'npm i express'
 
 mandei no terminal 'npm i --save-dev jest cross-env'
 
+mandei no terminal 'npm i sequelize mysql2'
+
 criei no 'package.json' 
 {
 
