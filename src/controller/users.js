@@ -55,6 +55,16 @@ class ControllerUser {
             res.status(500).send({ error: error.message })
         }
     }
+
+    async Login(req, res) {
+        try {
+            const { email, senha } = req.body
+            const token = await ServiceUser.Login(email, senha)
+            res.status(200).send({ token })
+        } catch (error) {
+            res.status(500).send({ error: error.message })
+        }
+    }
 }
 
 export default new ControllerUser()
