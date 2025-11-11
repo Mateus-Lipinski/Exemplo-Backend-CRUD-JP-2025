@@ -1,4 +1,7 @@
 import User from '../model/users.js'
+import jwt from 'jsonwebtoken'
+
+const jwt_segredo = "S3V0c3lEu3G4y"
 
 class ServiceUser {
 
@@ -66,6 +69,27 @@ class ServiceUser {
         }
 
         await user.destroy()
+    }
+
+    async Login(email, senha) {
+        if(!email || !senha) {
+            throw new Error('Email ou senha inválidos!')
+        }
+        
+        // se o email ou a senha for invalido eu não gero o token
+        const user = await User.findOne({ where: { email } })
+
+        if(!user || user.senha !== senha) {
+            throw new Error('Email ou senha inválidos!')
+        }
+
+        // criar o token
+        return  jwt.sign(
+            { id: user.id, nome: user.nome }, 
+            jwt_segredo,
+            { expiresIn: 60 * 60 }
+        )        
+
     }
 }
 
