@@ -13,7 +13,7 @@ class ControllerUser {
 
     async FindOne(req, res) {
         try {
-            const id = req.params.id
+            const id = req.params.id || req.headers?.user?.id
 
             const user = await ServiceUser.FindOne(id)
             res.status(200).send({ user })
@@ -24,9 +24,13 @@ class ControllerUser {
 
     async Create(req, res) {
         try {
+            const loggedUser = req.headers?.user
+            let permissao = 1
+            if(loggedUser){
+                permissao = req.body.permissao
+            }
             const { nome, email, senha, ativo } = req.body
-
-            await ServiceUser.Create(nome, email, senha, ativo, 1)
+            await ServiceUser.Create(nome, email, senha, ativo, permissao)
             res.status(201).send()
         } catch (error) {
             res.status(500).send({ error: error.message })
@@ -37,7 +41,6 @@ class ControllerUser {
         try {
             const id = req.params.id
             const { nome, email, senha, ativo } = req.body
-    
             await ServiceUser.Update(id, nome, email, senha, ativo)
             res.status(200).send()
         } catch (error) {
@@ -45,11 +48,10 @@ class ControllerUser {
         }
     }
 
-    Delete(req, res) {
+    async Delete(req, res) {
         try {
             const id = req.params.id
-
-            ServiceUser.Delete(id)
+            await ServiceUser.Delete(id)
             res.status(204).send()
         } catch (error) {
             res.status(500).send({ error: error.message })
@@ -59,7 +61,9 @@ class ControllerUser {
     async Login(req, res) {
         try {
             const { email, senha } = req.body
+
             const token = await ServiceUser.Login(email, senha)
+
             res.status(200).send({ token })
         } catch (error) {
             res.status(500).send({ error: error.message })
