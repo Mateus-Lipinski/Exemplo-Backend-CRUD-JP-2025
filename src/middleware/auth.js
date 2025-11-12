@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import ServiceUser from '../service/users.js'
 
-
 const jwt_segredo = "S3V0c3lEu3G4y"
 
 export default async function authMiddleware(req, res, next) {
