@@ -20,6 +20,10 @@ class User {
             },
             ativo: {
                 type: database.db.Sequelize.BOOLEAN
+            },
+            permissao: {
+                // recomendo usar ENUM
+                type: database.db.Sequelize.INTEGER
             }
         })
     }
